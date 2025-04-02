@@ -7,6 +7,78 @@
 
 import SwiftUI
 
+struct NumberInputView: View {
+    @Binding var text: String
+    @State private var showNumberPad = false
+    
+    var body: some View {
+        VStack {
+            // Input field
+            TextField("Enter value", text: $text)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .onTapGesture {
+                    showNumberPad = true
+                }
+            
+            // Custom number pad
+            if showNumberPad {
+                VStack(spacing: 10) {
+                    HStack(spacing: 10) {
+                        ForEach(1...3, id: \.self) { number in
+                            NumberButton(number: String(number), text: $text)
+                        }
+                    }
+                    HStack(spacing: 10) {
+                        ForEach(4...6, id: \.self) { number in
+                            NumberButton(number: String(number), text: $text)
+                        }
+                    }
+                    HStack(spacing: 10) {
+                        ForEach(7...9, id: \.self) { number in
+                            NumberButton(number: String(number), text: $text)
+                        }
+                    }
+                    HStack(spacing: 10) {
+                        NumberButton(number: ".", text: $text)
+                        NumberButton(number: "0", text: $text)
+                        Button(action: {
+                            if !text.isEmpty {
+                                text.removeLast()
+                            }
+                        }) {
+                            Image(systemName: "delete.left")
+                                .font(.title)
+                                .frame(width: 60, height: 60)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(8)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(12)
+            }
+        }
+    }
+}
+
+struct NumberButton: View {
+    let number: String
+    @Binding var text: String
+    
+    var body: some View {
+        Button(action: {
+            text += number
+        }) {
+            Text(number)
+                .font(.title)
+                .frame(width: 60, height: 60)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var firstInput: String = ""
     @State private var secondInput: String = ""
@@ -58,18 +130,30 @@ struct ContentView: View {
         if let value = Double(firstInput) {
             let convertedValue = convert(value: value, from: firstUnit, to: secondUnit)
             secondInput = String(format: "%.4f", convertedValue)
-        } else if let value = Double(secondInput) {
-            let convertedValue = convert(value: value, from: secondUnit, to: firstUnit)
-            firstInput = String(format: "%.4f", convertedValue)
+        } else {
+            secondInput = ""
         }
     }
     
     var body: some View {
         VStack(spacing: 20) {
+            // Header with ruler icon
+            VStack(spacing: 10) {
+                Image(systemName: "ruler")
+                    .font(.system(size: 60))
+                    .foregroundColor(.blue)
+                    .padding(.top, 20)
+                
+                Text("Unit Converter")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+            }
+            .padding(.bottom, 20)
+            
             // First input field with unit selection
             VStack {
-                TextField("Enter value", text: $firstInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                NumberInputView(text: $firstInput)
                     .onChange(of: firstInput) { _ in
                         updateConversion()
                     }
@@ -94,13 +178,13 @@ struct ContentView: View {
                 }
             }
             
-            // Second input field with unit selection
+            // Second display field with unit selection
             VStack {
-                TextField("Converted value", text: $secondInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onChange(of: secondInput) { _ in
-                        updateConversion()
-                    }
+                Text(secondInput.isEmpty ? "0.0000" : secondInput)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
