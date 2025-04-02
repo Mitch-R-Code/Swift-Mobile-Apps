@@ -139,7 +139,7 @@ struct ContentView: View {
         VStack(spacing: 20) {
             // Header with app icon
             VStack(spacing: 10) {
-                Image("1024 1")
+                Image("Face image")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
