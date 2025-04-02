@@ -137,11 +137,12 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            // Header with ruler icon
+            // Header with app icon
             VStack(spacing: 10) {
-                Image(systemName: "ruler")
-                    .font(.system(size: 60))
-                    .foregroundColor(.blue)
+                Image("1024 1")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
                     .padding(.top, 20)
                 
                 Text("Unit Converter")
