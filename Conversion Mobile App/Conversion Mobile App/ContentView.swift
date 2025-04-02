@@ -142,7 +142,7 @@ struct ContentView: View {
                 Image("Face image")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 300, height: 300)
                     .padding(.top, 20)
                 
                 Text("Unit Converter")
