@@ -202,12 +202,7 @@ struct ContentView: View {
             
             DedicationView()
                 .tabItem {
-                    Label("Claire", systemImage: "heart.fill")
-                }
-            
-            GrahamDedicationView()
-                .tabItem {
-                    Label("Graham", systemImage: "person.fill")
+                    Label("Dedication", systemImage: "heart.fill")
                 }
         }
     }

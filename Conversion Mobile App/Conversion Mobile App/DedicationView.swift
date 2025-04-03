@@ -2,23 +2,39 @@ import SwiftUI
 
 struct DedicationView: View {
     var body: some View {
-        VStack {
-            Image("Face image")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 300, height: 300)
-                .padding(.top, 20)
-            
-            Text("This app is dedicated to Claire,")
-                .font(.custom("MarkerFelt-Wide", size: 24))
+        VStack(spacing: 20) {
+            // Heart icon
+            Image(systemName: "heart.fill")
+                .font(.system(size: 60))
                 .foregroundColor(.pink)
-                .padding()
+                .padding(.top, 40)
             
-            Text("the love of my life!")
-                .font(.custom("MarkerFelt-Wide", size: 24))
-                .foregroundColor(.pink)
-                .padding()
+            // Dedication text
+            VStack(spacing: 15) {
+                Text("For Claire")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.pink)
+                
+                Text("Thank you for being my inspiration and support throughout this journey. Your encouragement and belief in me have made all the difference.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Text("With love,")
+                    .font(.headline)
+                    .padding(.top)
+                
+                Text("Your Developer")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            
+            Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.pink.opacity(0.1))
     }
 }
 
