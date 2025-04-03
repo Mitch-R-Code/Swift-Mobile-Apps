@@ -79,7 +79,7 @@ struct NumberButton: View {
     }
 }
 
-struct ContentView: View {
+struct ConverterView: View {
     @State private var firstInput: String = ""
     @State private var secondInput: String = ""
     @State private var firstUnit: String = "millimeter"
@@ -137,12 +137,11 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            // Header with app icon
+            // Header with ruler icon
             VStack(spacing: 10) {
-                Image("Face image")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 300, height: 300)
+                Image(systemName: "ruler")
+                    .font(.system(size: 60))
+                    .foregroundColor(.blue)
                     .padding(.top, 20)
                 
                 Text("Unit Converter")
@@ -159,23 +158,14 @@ struct ContentView: View {
                         updateConversion()
                     }
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(units, id: \.self) { unit in
-                            Button(action: {
-                                firstUnit = unit
-                                updateConversion()
-                            }) {
-                                Text(unit)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(firstUnit == unit ? Color.blue : Color.gray.opacity(0.2))
-                                    .foregroundColor(firstUnit == unit ? .white : .primary)
-                                    .cornerRadius(8)
-                            }
-                        }
+                Picker("From Unit", selection: $firstUnit) {
+                    ForEach(units, id: \.self) { unit in
+                        Text(unit.capitalized).tag(unit)
                     }
-                    .padding(.horizontal)
+                }
+                .pickerStyle(.menu)
+                .onChange(of: firstUnit) { _ in
+                    updateConversion()
                 }
             }
             
@@ -187,27 +177,39 @@ struct ContentView: View {
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(units, id: \.self) { unit in
-                            Button(action: {
-                                secondUnit = unit
-                                updateConversion()
-                            }) {
-                                Text(unit)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(secondUnit == unit ? Color.blue : .blue.opacity(0.2))
-                                    .foregroundColor(secondUnit == unit ? .white : .primary)
-                                    .cornerRadius(8)
-                            }
-                        }
+                Picker("To Unit", selection: $secondUnit) {
+                    ForEach(units, id: \.self) { unit in
+                        Text(unit.capitalized).tag(unit)
                     }
-                    .padding(.horizontal)
+                }
+                .pickerStyle(.menu)
+                .onChange(of: secondUnit) { _ in
+                    updateConversion()
                 }
             }
         }
         .padding()
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        TabView {
+            ConverterView()
+                .tabItem {
+                    Label("Converter", systemImage: "ruler")
+                }
+            
+            DedicationView()
+                .tabItem {
+                    Label("Claire", systemImage: "heart.fill")
+                }
+            
+            GrahamDedicationView()
+                .tabItem {
+                    Label("Graham", systemImage: "person.fill")
+                }
+        }
     }
 }
 
